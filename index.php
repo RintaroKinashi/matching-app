@@ -39,7 +39,7 @@ $stmt->execute();
     <title>ログイン機能</title>
   </head>
 
-    <form action="confirm.php" method="post">
+    <form action="home.php" method="post">
         <p>会員ID（メールアドレス）を入力：<input type="text" name="userID" required></p>
         <p>パスワードを入力：<input type="password" name="password" required></p>
         <p><input type="submit" value="ログイン"></p>
