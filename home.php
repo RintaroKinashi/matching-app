@@ -1,5 +1,5 @@
 <?php
-if(isset($_POST['user'])) {
+if(isset($_POST['userID'])) {
 $dsn='mysql:dbname=EC;charset=utf8';
 $user='root';
 $password='';
@@ -13,12 +13,22 @@ if($rows["password"] ==  $_POST['password']) {
 print "<p>ログイン成功</p>";
 }else {
 print "<p>ログイン失敗</p>";
+return false;
 }
 }else {
 print "<p>ログイン失敗</p>";
+return false;
 }
 }
 ?>
-<p>home画面</p>
 <img src="img/asahi.jpg" alt="asahichan">
+<?php 
+echo "<br>名前 :" . $rows['name'];
+echo "     性別 : ";
+if($rows['sex'] == 0){echo "男";}else{echo "女";}
+echo "<p>年齢 :" . $rows['age']. "</p>";
+echo "<p>お住まい:" . $rows['address']. "</p>";
+echo "<p>身長 : " . $rows['height'] . "cm   体重 : " . $rows['weight']. "kg</p>";
+echo "<p>自己紹介</p><p>" . $rows['comment']. "</p>";
 
+?>
