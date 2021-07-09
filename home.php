@@ -12,15 +12,14 @@ if($rows = $stmt->fetch()) {
 if($rows["password"] ==  $_POST['password']) {
 print "<p>ログイン成功</p>";
 }else {
-print "<p>ログイン失敗</p>";
-return false;
+    header("Location: ./index.php");
 }
 }else {
-print "<p>ログイン失敗</p>";
-return false;
+    header("Location: ./index.php");
 }
 }
 ?>
+
 <img src="img/asahi.jpg" alt="asahichan">
 <?php 
 echo "<br>名前 :" . $rows['name'];
