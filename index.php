@@ -23,7 +23,7 @@ catch (PDOExeption $e) {
 //ログイン状態の場合ログイン後のページにリダイレクト
 if (isset($_SESSION["login"])) {
   session_regenerate_id(TRUE);
-  header("Location: home.php");
+  header("Location: profile.php");
   exit();
 }
 
@@ -51,11 +51,13 @@ else {
     }
 
     //検索したユーザー名に対してパスワードが正しいかを検証
+    // ↓ハッシュ化しているときに使用する
+    // if (!password_verify($_POST['pass'], $result['pass'])) {
     //正しいとき
     if($result["password"] ==  $_POST['pass']) {
       session_regenerate_id(TRUE); //セッションidを再発行
       $_SESSION["login"] = $_POST['userID']; //セッションにログイン情報を登録
-      header("Location: home.php"); //ログイン後のページにリダイレクト
+      header("Location: profile.php"); //ログイン後のページにリダイレクト
       exit();
     }
     //正しくないとき
