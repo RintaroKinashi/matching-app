@@ -17,7 +17,8 @@ $stmt = $dbh->prepare("INSERT INTO USER VALUES(
                                       :comment
                       )");
 $stmt->bindParam(':userID', $_POST['userID']); // DBのカラム名とここの定義は揃えなくてよい。
-$stmt->bindParam(':password', $_POST['password']);
+// ハッシュ化したパスワードをinsertする方法を探す
+$stmt->bindParam(':password', password_hash($_POST['password'], PASSWORD_DEFAULT));
 $stmt->bindParam(':name', $_POST['name']);
 $stmt->bindParam(':sex', $_POST['sex']);
 $stmt->bindParam(':address', $_POST['address']);
