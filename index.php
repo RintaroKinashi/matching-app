@@ -51,18 +51,18 @@ else {
     }
 
     //検索したユーザー名に対してパスワードが正しいかを検証
-    // ↓ハッシュ化しているときに使用する
-    // if (!password_verify($_POST['pass'], $result['pass'])) {
+    // ↓ハッシュ化していないときver
+    // if($result["password"] ==  $_POST['pass']) {
+    //正しくないとき
+    if (!password_verify($_POST['pass'], $result['password'])) {
+      $message="ユーザー名かパスワードが違います";
+    }
     //正しいとき
-    if($result["password"] ==  $_POST['pass']) {
+    else {
       session_regenerate_id(TRUE); //セッションidを再発行
       $_SESSION["login"] = $_POST['userID']; //セッションにログイン情報を登録
       header("Location: profile.php"); //ログイン後のページにリダイレクト
       exit();
-    }
-    //正しくないとき
-    else {
-      $message="ユーザー名かパスワードが違います";
     }
   }
 }
@@ -85,7 +85,7 @@ echo $message;
         <p>パスワードを入力：<input type="password" name="pass" required></p>
         <p><input type="submit" value="ログイン"></p>
     </form>
-  <a href="new-member.php">新規会員登録</a>
+  <a href="profileRegistration.php">新規会員登録</a>
 
 </html>
     

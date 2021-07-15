@@ -30,7 +30,8 @@ $result = $stmt -> fetch(PDO::FETCH_ASSOC);
       <div class="header-list">
         <ul>
           <li><a href="./home.php">Home</li>
-          <li><a href="./50question.php">自己分析</a></li>
+          <li><a href="./question.php">分析</a></li>
+          <li><a href="./matching.php">検索</a></li>
           <li><a href="./contactform.php">お問い合わせ</a></li>
           <li><a href="./logout.php">ログアウト</a></li>
         </ul>
@@ -48,7 +49,7 @@ $result = $stmt -> fetch(PDO::FETCH_ASSOC);
     echo "<p>自己紹介</p><p>" . $result['comment']. "</p>";
 ?>
 
-<a href="new-member.php">新規会員登録</a>
+<a href="profileRegistration.php">編集</a>
 
 <div class="footer">
     </div>
