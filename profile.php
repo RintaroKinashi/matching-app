@@ -38,7 +38,7 @@ $result = $stmt -> fetch(PDO::FETCH_ASSOC);
       </div>
     </div>
 
-<img src="img/asahi.jpg" alt="asahichan">
+<img src="images/<?php echo $result['image']; ?>" width="300" height="300">
 <?php 
     echo "<br>名前 :" . $result['name'];
     echo "     性別 : ";
