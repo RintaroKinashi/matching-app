@@ -23,7 +23,7 @@ $dbh = new PDO($dsn,$user,$password);
   <div class="header">
       <div class="header-list">
         <ul>
-          <li><a href="./home.php">Home</li>
+          <li><a href="./profile.php">MyProfile</li>
           <li><a href="./question.php">分析</a></li>
           <li><a href="./matching.php">検索</a></li>
           <li><a href="./contactform.php">お問い合わせ</a></li>

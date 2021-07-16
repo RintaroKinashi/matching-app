@@ -6,6 +6,7 @@ $dsn='mysql:dbname=EC;charset=utf8';
 $user='root';
 $password='';
 $dbh = new PDO($dsn,$user,$password);
+$mode = 0;
 
 // 既存会員編集
 if(isset($_SESSION["login"])){
@@ -144,8 +145,8 @@ if(isset($_POST['name']) && isset($_SESSION['login'])) {
         <p>登録名：<input type="text" name="name" value="<?php
 if( !empty($result['name']) ){ echo $result['name']; } ?>"></p>
         性別：
-        <input type="radio" name="sex" value=0 <?php if($result['sex'] == 0){echo "checked";}?>>男
-        <input type="radio" name="sex" value=1 <?php if($result['sex'] == 1){echo "checked";}?>>女
+        <input type="radio" name="sex" value=0 <?php if($mode==1){if($result['sex'] == 0){echo "checked";}}?>>男
+        <input type="radio" name="sex" value=1 <?php if($mode==1){if($result['sex'] == 1){echo "checked";}}?>>女
         <p>年齢：<input type="text" name="age" value="<?php
  if( !empty($result['age']) ){ echo $result['age']; } ?>"></p>
         <p>お住まい：<input type="text" name="address" value="<?php
