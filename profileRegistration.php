@@ -17,32 +17,44 @@ if(isset($_SESSION["login"])){
 }
 
 // 保存ボタン押下時の共通処理
-if(isset($_POST['userID'])) {
-  if (strlen($_POST['name']) < 0){
-    echo "名前を記入してください。";
-    exit();
-  }
-}
+// if(isset($_POST['userID'])) {
+//   if (strlen($_POST['name']) < 1){
+//     echo "名前を記入してください。";
+//     exit();
+//   }
+// }
 
+// 画像ファイルのロジック：https://qiita.com/ryo-futebol/items/11dea44c6b68203228ff
+// より分かりやすい画像アップロード：https://note.com/note256/n/n4b391f5457c0
+// $_FILES['bbsimg']['name'];      //アップした際の元のファイル名
+if (!empty($_FILES['image']['name'])){
+  // uniqueなIDを作成する。
+  $image = uniqid(mt_rand(), true);
+  // strrchr：アップロードされたファイルの拡張子を取得　→　「.jpg」とだけ抜き出す
+  // substr：→　「jpg」とだけ抜き出す
+  $image .= '.' . substr(strrchr($_FILES['image']['name'], '.'), 1);
+  // 「img/（ユニークなID）.jpg」のようなパスができあがる。
+  $file = "img/$image";
+      // // 画像ファイルかのチェック
+      // if (!exif_imagetype($file)) {
+      //   echo "画像ファイルを選択してください。";
+      //   exit();
+      // }
+      // imagesディレクトリにファイル保存   $_FILES['bbsimg']['tmp_name'];  //自動的にサーバー上に一時保存されたファイル
+      // move_uploaded_file：第一引数（一時フォルダ）第二引数（移動先のパス）
+      move_uploaded_file($_FILES['image']['tmp_name'], './img/' . $image);
+}
 
 // 新規会員登録時
 if(isset($_POST['userID']) && !isset($_SESSION["login"])) {
-      if (strlen($_POST['userID']) < 5){
-        echo "IDは5文字以上入力してください。";
-        exit();
-      }
-      elseif (strlen($_POST['password']) < 5){
-        echo "パスワードは5文字以上入力してください。";
-        exit();
-      }
-      // // 画像ファイルのロジック：https://qiita.com/ryo-futebol/items/11dea44c6b68203228ff
-      // if (isset($_POST['image'])){
-      //   $image = uniqid(mt_rand(), true);
-      //   //アップロードされたファイルの拡張子を取得 ↓どゆこと？　$変数[][]：二次元配列
-      //   $image .= '.' . substr(strrchr($_FILES['image']['name'], '.'), 1);
-      //   $file = "images/$image";
-      // }
-
+  if (strlen($_POST['userID']) < 5){
+    echo "IDは5文字以上入力してください。";
+    exit();
+  }
+  elseif (strlen($_POST['password']) < 5){
+    echo "パスワードは5文字以上入力してください。";
+    exit();
+  }
     $stmt = $dbh->prepare("INSERT INTO USER VALUES(
                                           :userID,
                                           :password,
@@ -66,24 +78,14 @@ if(isset($_POST['userID']) && !isset($_SESSION["login"])) {
     $stmt->bindParam(':height', $_POST['height']);
     $stmt->bindParam(':weight', $_POST['weight']);
     $stmt->bindParam(':comment', $_POST['comment']);
-    $stmt->bindParam(':image', $_POST['image']);
-    //ファイルが選択されていれば$imageにファイル名を代入
-    if (!empty($_FILES['image']['name'])) {
-      //imagesディレクトリにファイル保存
-      move_uploaded_file($_FILES['image']['tmp_name'], './images/' . $image);
-      //画像ファイルかのチェック
-      if (!exif_imagetype($file)) {
-        echo "画像ファイルを選択してください。";
-        exit();
-      }
+    $stmt->bindParam(':image', $file);
     $stmt->execute();
     header("Location: index.php");
     exit();
-  }
 }
 
 // 会員情報編集時
-if(isset($_POST['userID']) && isset($_SESSION['login'])) {
+if(isset($_POST['name']) && isset($_SESSION['login'])) {
   // ここをupdate文に書き換える
   $stmt = $dbh->prepare("UPDATE user SET
                                         name = :name,
@@ -92,7 +94,8 @@ if(isset($_POST['userID']) && isset($_SESSION['login'])) {
                                         age = :age,
                                         height = :height,
                                         weight = :weight,
-                                        comment = :comment
+                                        comment = :comment,
+                                        image = :image
                                         WHERE UserID = :userID");
   $stmt->bindParam(':name', $_POST['name']);
   $stmt->bindParam(':sex', $_POST['sex']);
@@ -101,8 +104,16 @@ if(isset($_POST['userID']) && isset($_SESSION['login'])) {
   $stmt->bindParam(':height', $_POST['height']);
   $stmt->bindParam(':weight', $_POST['weight']);
   $stmt->bindParam(':comment', $_POST['comment']);
+  if (!empty($_FILES['image']['name'])){
+    $stmt->bindParam(':image', $file);
+    unlink($result['image']);
+  }
+  else{
+    $stmt->bindParam(':image', $result['image']);
+  }
   $stmt->bindParam(':userID', $_SESSION['login']);
   $stmt->execute();
+
   header("Location: profile.php");
   exit();
   }
@@ -124,16 +135,17 @@ if(isset($_POST['userID']) && isset($_SESSION['login'])) {
           <p>会員ID（メールアドレス）：<input type="text" name="userID" ></p>
           <p>パスワード：<input type="password" name="password"></p>
         </div>
+        <!-- https://teratail.com/questions/72750 -->
         <p>画像ファイル</p>
-        <input type="file" name="image1"></p>
-        <input type="file" name="image2"></p>
+        <input type="file" name="image"></p>
+        <?php if( !empty($result['image']) ){ echo $result['image']; } ?>
+        <p>元の画像</p>
+        <img src="<?php echo $result['image']; ?>" width="300" height="300">
         <p>登録名：<input type="text" name="name" value="<?php
 if( !empty($result['name']) ){ echo $result['name']; } ?>"></p>
         性別：
-        <input type="radio" name="sex" value=0 checked="<?php
- if( $result['sex'] == 0 ){ echo "checked";} ?>">男
-        <input type="radio" name="sex" value=1 checked="<?php 
- if( $result['sex'] == 1 ){ echo "checked";} ?>">女</p>
+        <input type="radio" name="sex" value=0 <?php if($result['sex'] == 0){echo "checked";}?>>男
+        <input type="radio" name="sex" value=1 <?php if($result['sex'] == 1){echo "checked";}?>>女
         <p>年齢：<input type="text" name="age" value="<?php
  if( !empty($result['age']) ){ echo $result['age']; } ?>"></p>
         <p>お住まい：<input type="text" name="address" value="<?php
