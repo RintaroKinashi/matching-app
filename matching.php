@@ -1,20 +1,113 @@
-<p>呼び出されたPHPプログラム</p>
-
-
-<p><input type="submit" name="search" value="検索" /></p>
-
 <?php
-    $list = [
-        $_POST['name'],
-        $_POST['age'],
-        $_POST['q1'],
-        $_POST['q2'],
-        $_POST['q3']
-    ];
-    echo "私は". $list[0] . "です。<br />";
-    print_r($list);
-    echo "<br />";
+//セッションを使うことを宣言
+session_start();
 
+//ログインされていない場合は強制的にログインページにリダイレクト
+if (!isset($_SESSION["login"])) {
+  header("Location: index.php");
+  exit();
+}
+$dsn='mysql:dbname=EC;charset=utf8';
+$user='root';
+$password='';
+$dbh = new PDO($dsn,$user,$password);
+
+$stmt1 = $dbh->prepare("SELECT * FROM r_answer WHERE UserID=:userID");
+$stmt1->bindParam(':userID', $_SESSION["login"]);
+$stmt1->execute();
+$result1 = $stmt1 -> fetch(PDO::FETCH_ASSOC);
+
+$stmtID = $dbh->prepare("SELECT UserID FROM r_answer WHERE UserID!=:userID");
+$stmtID->bindParam(':userID', $_SESSION["login"]);
+$stmtID->execute();
+$resultID = $stmtID -> fetchAll(PDO::FETCH_ASSOC);
+
+// $a = array_column($resultID, 'userID');
+print_r($resultID);
+// echo "<pre>";
+// var_dump($resultID);
+// echo "</pre>";
+
+$stmt2 = $dbh->prepare("SELECT * FROM r_answer WHERE UserID='asahi003003'");
+$stmt2->execute();
+$result2 = $stmt2 -> fetch(PDO::FETCH_ASSOC);
+
+$point = 0;
+$list_target=array();
+$All_list_target = array();
+
+$stmt3 = $dbh->prepare("SELECT * FROM user WHERE UserID='asahi003003'");
+$stmt3->execute();
+$result3 = $stmt3 -> fetch(PDO::FETCH_ASSOC);
+
+$i = 0;
+foreach ($result3 As $row){
+    $list_target[$i] = $row;
+    $i++;
+}
+
+for($j=1;$j<4;$j++){
+    if ($result1['q'. $j] === $result2['q'. $j]){
+        $point++;
+    }
+}
+$list_target[$i] = $point;
+echo "<pre>";
+var_dump($list_target);
+echo "</pre>";
+echo round($list_target[$i]/3*100). "%です！";
+
+foreach ($data as $value) {
+    $list_target[$i] = $value;
+    $i++;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$stmtOtherInfo = $dbh->prepare("SELECT * FROM user");
+// $stmtOtherInfo->bindParam(':userID', $row['UserID']);
+$stmtOtherInfo->execute();
+// 全データの抜き出し方法：http://alphasis.info/2014/10/php-gyakubiki-mysql-table/
+// while($resultOtherInfo = $stmtOtherInfo -> fetch(PDO::FETCH_ASSOC)){
+//     echo "<br />名前：" . $resultOtherInfo['name'];
+//     echo "<br />出身:" . $resultOtherInfo["address"];
+//     echo "<br />COMMENT<br />";
+//     echo $resultOtherInfo["comment"];
+//     echo "<br />-------------<br />";
+// }
+
+// $resultOtherInfo = $stmtOtherInfo -> fetchAll(PDO::FETCH_ASSOC|PDO::FETCH_UNIQUE);
+// echo "<pre>";
+// var_dump($resultOtherInfo);
+// echo "</pre>";
+//     echo "<br />名前：" . $resultOtherInfo[$_SESSION["login"]]['name'];
+//     echo "<br />出身:" . $resultOtherInfo[$_SESSION["login"]]["address"];
+//     echo "<br />-------------<br />";
+    
     $row = 0;
     $list_target=array();
     $All_list_target = array();

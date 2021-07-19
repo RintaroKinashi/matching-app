@@ -79,7 +79,7 @@ if(isset($_POST['q1'])){
     echo "<p>" . $resultq["sentence"] . "</p>";
     for ($j=0;$j<4;$j++){
       $k = "";
-      if($result1['q'. $i]==$j){$k = "checked";}
+      if(isset($result1['UserID']) && $result1['q'. $i]==$j){$k = "checked";}
       echo "<input type='radio' name='q". $i ."' value='" . $j ."' ". $k .">" . $resultq["Choice".$j+1]; // if(!empty($result1["UserID"])){if($result1['q'. $i]==$j){echo "checked";}}
     }
     echo "</div>";

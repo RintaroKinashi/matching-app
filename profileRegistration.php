@@ -87,7 +87,6 @@ if(isset($_POST['userID']) && !isset($_SESSION["login"])) {
 
 // 会員情報編集時
 if(isset($_POST['name']) && isset($_SESSION['login'])) {
-  // ここをupdate文に書き換える
   $stmt = $dbh->prepare("UPDATE user SET
                                         name = :name,
                                         sex = :sex,
