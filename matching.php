@@ -24,7 +24,7 @@ $All_list_target = array();
 foreach($result as $re) {
     $list_target[0] = $re['UserID'];
     $point = 0;
-    for($j=1;$j<4;$j++){
+    for($j=1;$j<=NUMBER_OF_QUESTIONS;$j++){
         if ($re['q'. $j] == $resultMe['q'. $j]){
             $point++;
         }

@@ -9,22 +9,23 @@ $result1 = $stmt1 -> fetch(PDO::FETCH_ASSOC);
 
 if(isset($_POST['q1'])){
   if (empty($result1["UserID"])){
-    // IDが空ならinsert
-    $stmt = $dbh->prepare("INSERT INTO r_answer VALUES(
-        :userID,
-        :q1,
-        :q2,
-        :q3,
-        :q4
-    )");
+    // 質問に未回答(IDが空)ならinsert
+    $SQL = "INSERT INTO r_answer VALUES(:userID,";
+    for ($i=1;$i<NUMBER_OF_QUESTIONS;$i++){
+      $SQL .= ":q". $i . ",";
+    }
+    $SQL .= ":q". NUMBER_OF_QUESTIONS . ");";
+    echo $SQL;
+    $stmt = $dbh->prepare($SQL);
   }
   else{
-    $stmt = $dbh->prepare("UPDATE r_answer SET
-        q1 = :q1,
-        q2 = :q2,
-        q3 = :q3,
-        q4 = :q4
-        WHERE UserID = :userID");
+    $SQL = "UPDATE r_answer SET ";
+    for ($i=1;$i<NUMBER_OF_QUESTIONS;$i++){
+      $SQL .= "q". $i . " = :q". $i . ", ";
+    }
+    $SQL .= "q". NUMBER_OF_QUESTIONS . " = :q". NUMBER_OF_QUESTIONS . " WHERE UserID = :userID;";
+    echo $SQL;
+    $stmt = $dbh->prepare($SQL);
   }
     $stmt->bindParam(':userID', $_SESSION["login"]);
     for ($i=1;$i<NUMBER_OF_QUESTIONS+1;$i++){
