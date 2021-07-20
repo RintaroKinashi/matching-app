@@ -36,7 +36,7 @@ if (!empty($_FILES['image']['name'])){
   $image .= '.' . substr(strrchr($_FILES['image']['name'], '.'), 1);
   // 「img/（ユニークなID）.jpg」のようなパスができあがる。
   $file = "img/$image";
-      // // 画像ファイルかのチェック
+      // 画像ファイルかのチェック
       // if (!exif_imagetype($file)) {
       //   echo "画像ファイルを選択してください。";
       //   exit();
@@ -44,6 +44,9 @@ if (!empty($_FILES['image']['name'])){
       // imagesディレクトリにファイル保存   $_FILES['bbsimg']['tmp_name'];  //自動的にサーバー上に一時保存されたファイル
       // move_uploaded_file：第一引数（一時フォルダ）第二引数（移動先のパス）
       move_uploaded_file($_FILES['image']['tmp_name'], './img/' . $image);
+}
+else{
+  $file = "img/noimage.jpg";
 }
 
 // 新規会員登録時

@@ -11,6 +11,8 @@ $dsn='mysql:dbname=EC;charset=utf8';
 $user='root';
 $password='';
 $dbh = new PDO($dsn,$user,$password);
+// 問題数
+const NUMBER_OF_QUESTIONS = 4;
 ?>
 
 <!DOCTYPE html>
