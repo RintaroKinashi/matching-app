@@ -44,29 +44,30 @@ array_multisort($sort_keys, SORT_DESC, $All_list_target);
 // echo "</pre>";
 ?>
 
-<table>
-    <?php
+<?php
         foreach ($All_list_target as $All_list_targ) { 
             $stmtMe = $dbh->prepare("SELECT * FROM user WHERE UserID=:userID");
             $stmtMe->bindParam(':userID', $All_list_targ[0]);
             $stmtMe->execute();
             $resultMe = $stmtMe -> fetch(PDO::FETCH_ASSOC);
+            $i=0;
     ?>
-    <tr>
-      <td>
-        <img src="<?php echo $resultMe['image']; ?>" width="100" height="100">
-      </td>
-      <td>
-        <p class="goods"><?php echo $resultMe['name']. "　　". $resultMe['address'] ?></p>
-        <p><?php echo nl2br($resultMe['comment']) ?></p>
-      </td>
-      <td>
-          <p><?php echo "マッチング率は" . $All_list_targ[1] . "％です！";?></p>
-      </td>
-    </tr>
+    <div class="User_block">
+    <form method="post" action="profile.php">
+        <input type="hidden" name="Selected_UserID" value=<?php echo $All_list_targ[0]?>>
+    <a href="" onclick="this.parentNode.submit(); return false;" style="color:black;text-decoration:none">
+       <table>
+            <tr>
+            <td><img src="<?php echo $resultMe['image']; ?>" width="150" height="150"></td>
+            <td class="User_pro"><?php echo $resultMe['name']. "　　". $resultMe['address'] ?> <p><?php echo nl2br($resultMe['comment']) ?></p></td>
+            <td class="User_pro"><?php echo "マッチング率は" . $All_list_targ[1] . "％です！";?></td>
+            </tr>
+        </table>
+    </a>
+    </form>
+    </div>
     <?php } ?>
-</table>
     
 <div class="footer">
-    </div>
+</div>
 </body>
