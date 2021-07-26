@@ -9,6 +9,15 @@ try {
 $dsn='mysql:dbname=EC;charset=utf8';
 $user='root';
 $password='';
+$message = "";
+$cookie_userID ="";
+
+if(isset($_COOKIE["userID"])){
+  $cookie_userID = $_COOKIE["userID"];
+}else{
+  $cookie_userID = "";
+}
+
 $dbh = new PDO($dsn,$user,$password, [
   // エラー発生時にエラーを投げる。（エラーコードのみ等ではなく）
   PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -28,16 +37,10 @@ if (isset($_SESSION["login"])) {
 }
 
 //postされて来なかったとき
-if (count($_POST) === 0) {
-  $message = "";
-}
-//postされて来た場合
-else {
-  //ユーザー名またはパスワードが送信されて来なかった場合
+if (count($_POST) !== 0) {
   if(empty($_POST["userID"]) || empty($_POST["pass"])) {
     $message = "ユーザー名とパスワードを入力してください";
   }
-  //ユーザー名とパスワードが送信されて来た場合
   else {
     //post送信されてきたユーザー名がデータベースにあるか検索
     try {
@@ -51,21 +54,23 @@ else {
     }
 
     //検索したユーザー名に対してパスワードが正しいかを検証
-    // ↓ハッシュ化していないときver
-    // if($result["password"] ==  $_POST['pass']) {
     //正しくないとき
     if (!password_verify($_POST['pass'], $result['password'])) {
       $message="ユーザー名かパスワードが違います";
     }
     //正しいとき
     else {
-      session_regenerate_id(TRUE); //セッションidを再発行
+      // cookieのセット 保存期間：１日
+      setcookie('UserID', $_POST['userID'],time()+60*60*24);
+      // セッションidを再発行
+      session_regenerate_id(TRUE);
       $_SESSION["login"] = $_POST['userID']; //セッションにログイン情報を登録
       header("Location: profile.php"); //ログイン後のページにリダイレクト
       exit();
     }
   }
 }
+// メッセージ出力
 $message = htmlspecialchars($message);
 echo $message;
 ?>
@@ -81,7 +86,9 @@ echo $message;
   </head>
 
     <form action="index.php" method="post">
-        <p>会員ID（メールアドレス）を入力：<input type="text" name="userID" required></p>
+        <p>会員ID（メールアドレス）を入力：<input type="text" name="userID"  required value=<?php
+        echo $cookie_userID;
+        ?>></p>
         <p>パスワードを入力：<input type="password" name="pass" required></p>
         <p><input type="submit" value="ログイン"></p>
     </form>
