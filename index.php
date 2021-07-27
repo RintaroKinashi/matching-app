@@ -37,13 +37,13 @@ if (isset($_SESSION["login"])) {
   exit();
 }
 
-//postされて来なかったとき
+//postされて来きたとき
 if (count($_POST) !== 0) {
   if(empty($_POST["userID"]) || empty($_POST["pass"])) {
     $message = "ユーザー名とパスワードを入力してください";
   }
   else {
-    //post送信されてきたユーザー名がデータベースにあるか検索
+    //post送信されてきたユーザー名がDBにあるか検索
     try {
       $stmt = $dbh -> prepare('SELECT * FROM user WHERE userID=:userID');
       $stmt->bindParam(':userID', $_POST['userID']);
@@ -53,7 +53,6 @@ if (count($_POST) !== 0) {
     catch (PDOExeption $e) {
       exit('データベースエラー');
     }
-
     //検索したユーザー名に対してパスワードが正しいかを検証
     //正しくないとき
     if (!password_verify($_POST['pass'], $result['password'])) {
@@ -61,10 +60,10 @@ if (count($_POST) !== 0) {
     }
     //正しいとき
     else {
-      // cookieのセット 保存期間：１日
-      setcookie('UserID', $_POST['userID'],time()+60*60*24);
+      // // cookieのセット 保存期間：１日
+      // setcookie('UserID', $_POST['userID'],time()+60*60*24);
       // セッションidを再発行
-      session_regenerate_id(TRUE);
+      // session_regenerate_id(TRUE);
       $_SESSION["login"] = $_POST['userID']; //セッションにログイン情報を登録
       header("Location: profile.php"); //ログイン後のページにリダイレクト
       exit();
@@ -82,7 +81,6 @@ echo $message;
     <meta charset="utf-8">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
     <title>ログイン機能</title>
   </head>
 
