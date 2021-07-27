@@ -1,18 +1,34 @@
 <?php
 require 'common.php';
 
-$mode = "login_user";
+$selected_user = "";
+$Now_Time = date("Y-m-d H:i:s");
 $stmt = $dbh->prepare("SELECT * FROM user WHERE userID=:userID");
 if(!isset($_POST['Selected_UserID'])){
     // ログインユーザのプロフィールを表示
     $stmt->bindParam(':userID', $_SESSION["login"]);
 }else{
-    $mode = "selected_user";
+    $_SESSION["Selected_UserID"] = $_POST['Selected_UserID'];
     // 選択されたユーザのプロフィールを表示
     $stmt->bindParam(':userID', $_POST['Selected_UserID']);
 }
 $stmt->execute();
 $result = $stmt -> fetch(PDO::FETCH_ASSOC);
+
+if(isset($_POST['request'])){
+    $stmt1 = $dbh->prepare("INSERT INTO r_request VALUES(
+        :MEMBER_ID,
+        :REQUEST_USERID,
+        :REQUEST_TIME
+    )");
+    $selected_user = $_SESSION["Selected_UserID"];
+    $stmt1->bindParam(':MEMBER_ID', $selected_user);
+    $stmt1->bindParam(':REQUEST_USERID', $_SESSION["login"]);
+    $stmt1->bindParam(':REQUEST_TIME', $Now_Time);
+    $stmt1->execute();
+    echo "友達申請を行いました！";
+    exit();
+}
 
 ?>
 
@@ -27,13 +43,14 @@ $result = $stmt -> fetch(PDO::FETCH_ASSOC);
         echo "<p>身長 : " . $result['height'] . "cm   体重 : " . $result['weight']. "kg</p>";
         echo "<p>自己紹介</p><p>" . $result['comment']. "</p>";
 
-        if($mode != "selected_user"){?>
+        if(!isset($selected_user)){?>
             <a href="profileRegistration.php">編集</a>
-            <?php } else{?>
-            <a href="profileRegistration.php">友達申請</a>
-    <?php }
-    ?>
-
+        <?php } else{?>
+            <form action="profile.php" method="post">
+                <input type="submit" name="request" value="友達申請" >
+            </form>
+    <?php 
+}?>
 </div>
 
 <div class="footer">

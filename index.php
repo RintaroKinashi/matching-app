@@ -12,11 +12,12 @@ $password='';
 $message = "";
 $cookie_userID ="";
 
-if(isset($_COOKIE["userID"])){
-  $cookie_userID = $_COOKIE["userID"];
-}else{
-  $cookie_userID = "";
-}
+// // cookie面倒なので一時削除
+// if(isset($_COOKIE["userID"])){
+//   $cookie_userID = $_COOKIE["userID"];
+// }else{
+//   $cookie_userID = "";
+// }
 
 $dbh = new PDO($dsn,$user,$password, [
   // エラー発生時にエラーを投げる。（エラーコードのみ等ではなく）

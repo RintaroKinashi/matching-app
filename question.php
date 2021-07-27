@@ -35,8 +35,6 @@ if(isset($_POST['q1'])){
     header("Location: matching.php");
     exit();
 }
-
-
 ?>
 
 <form action="question.php" method="post">
