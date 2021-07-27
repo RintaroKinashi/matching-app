@@ -130,6 +130,11 @@ if(isset($_POST['name']) && isset($_SESSION['login'])) {
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
     <title>新規会員登録</title>
+    <style>
+        #preview img{
+        width: 100px;
+}
+    </style>
   </head>
 
     <form action="profileRegistration.php" method="post" enctype="multipart/form-data">
@@ -140,8 +145,8 @@ if(isset($_POST['name']) && isset($_SESSION['login'])) {
         </div>
         <!-- https://teratail.com/questions/72750 -->
         <p>画像ファイル</p>
-        <input type="file" name="image"></p>
-        <?php if( !empty($result['image']) ){ echo $result['image']; } ?>
+        <p><input type="file" name="image" id="file"></p>
+        <div id="preview"></div>
         <p>元の画像</p>
         <img src="<?php echo $result['image']; ?>" width="300" height="300">
         <p>登録名：<input type="text" name="name" value="<?php
@@ -170,5 +175,15 @@ if( !empty($result['name']) ){ echo $result['name']; } ?>"></p>
         document.getElementById("mode_change").innerHTML="登録情報変更";
         document.getElementById("mode_delete").style.display="none";
       }
+    </script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js">
+      $('#file').change(function() {
+        var fr = new FileReader();
+        fr.onload = function() {
+          var img = $('<img>').attr('src', fr.result);
+          $('#preview').append(img);
+        };
+        fr.readAsDataURL(this.files[0]);
+      });
     </script>
 </html>
