@@ -11,9 +11,14 @@ $stmtMe->bindParam(':userID', $_SESSION["login"]);
 $stmtMe->execute();
 $resultMe = $stmtMe -> fetch(PDO::FETCH_ASSOC);
 
-// if (!isset($result['UserID'])){
-//     echo "友達申請がまだ来ていません！";
-// } else{
+$stmtRequest = $dbh->prepare("SELECT * FROM r_request WHERE MEMBER_ID=:userID");
+$stmtRequest->bindParam(':userID', $_SESSION["login"]);
+$stmtRequest->execute();
+$resultRequest = $stmtRequest -> fetch(PDO::FETCH_ASSOC);
+
+if (!isset($resultRequest['MEMBER_ID'])){
+    echo "友達申請がまだ来ていません！";
+} else{
     // ユーザIDとマッチング率を配列に格納する。
     $i=0;
     $list_target=array();
@@ -40,7 +45,6 @@ $resultMe = $stmtMe -> fetch(PDO::FETCH_ASSOC);
     // echo "<pre>";
     // print_r($All_list_target);
     // echo "</pre>";
-// }
 ?>
 
 <?php
@@ -66,7 +70,8 @@ $resultMe = $stmtMe -> fetch(PDO::FETCH_ASSOC);
     </a>
     </form>
     </div>
-    <?php } ?>
+    <?php }
+} ?>
     
 <div class="footer">
 </div>

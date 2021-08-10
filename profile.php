@@ -22,7 +22,7 @@ if(isset($_POST['request'])){
     $stmt2->bindParam(':REQUEST_USERID', $_SESSION["login"]);
     $stmt2->execute();
     $result2 = $stmt -> fetch(PDO::FETCH_ASSOC);
-    var_dump($result2['MEMBER_ID']);
+    // var_dump($result2['MEMBER_ID']);
     if(!isset($result2['MEMBER_ID'])){
         $stmt1 = $dbh->prepare("INSERT INTO r_request VALUES(
             :MEMBER_ID,
