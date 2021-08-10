@@ -85,11 +85,9 @@ echo $message;
   </head>
 
     <form action="index.php" method="post">
-        <p>会員ID（メールアドレス）を入力：<input type="text" name="userID"  required value=<?php
-        echo $cookie_userID;
-        ?>></p>
-        <p>パスワードを入力：<input type="password" name="pass" required></p>
-        <p><input type="submit" value="ログイン"></p>
+      <p>会員ID（メールアドレス）を入力：<input type="text" name="userID"  required value=<?php echo $cookie_userID;?>></p>
+      <p>パスワードを入力：<input type="password" name="pass" required></p>
+      <p><input type="submit" value="ログイン"></p>
     </form>
   <a href="profileRegistration.php">新規会員登録</a>
 
