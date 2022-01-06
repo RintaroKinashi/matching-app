@@ -1,0 +1,59 @@
+/* body {
+    font-family: "Avenir Next";
+  } */
+  
+  li {
+    list-style: none;
+  }
+  /*============================================
+  ヘッダー CSSが反映されないときは「Shift+F5」でキャッシュを削除
+  ============================================*/
+  .header {
+    background-color: #d0cd26;
+    color: #fff;
+    height: 90px;
+  }
+  .header-list li {
+    float: left;
+    padding: 33px 20px;
+  }
+  /*============================================
+  フッター
+  ============================================*/
+  .footer {
+    background-color: #727d85;
+    height: 60px;
+    padding: 40px;
+  }
+  /*============================================
+  ユーザーブロック
+  ============================================*/
+  .User_block{
+    width: 800px;
+    height: 50%;              /* 高さ指定 */
+    box-shadow: 0 0 4px gray;
+    margin: 10px;
+  }
+  .User_block:hover {
+    box-shadow: 0 0 8px gray;
+  }
+  .User_pro {
+    padding-left: 10px;
+    width: 250px;
+  }
+  /*============================================
+  パーテーションブロック
+  ============================================*/
+  .Partition_Block {
+    padding: 0.5em 1em;
+    margin: 2em 0;
+    color: #232323;
+    background: #fff8e8;
+    border-left: solid 10px #ffc06e;
+  } 
+  /*============================================
+  プロフィール
+  ============================================*/
+  .profile {
+    text-align: center;
+  }

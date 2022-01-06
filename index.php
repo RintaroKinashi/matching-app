@@ -1,32 +1,78 @@
+<!-- セッションを使ったログインページの作成：https://yama-itech.net/php-login-with-session -->
+
 <?php
-if(isset($_POST['userID'])) {
+// セッションを使うことを宣言
+session_start();
+
+// DBへ接続
+try {
 $dsn='mysql:dbname=EC;charset=utf8';
 $user='root';
 $password='';
-$dbh = new PDO($dsn,$user,$password);
+$message = "";
+$cookie_userID ="";
 
-$stmt = $dbh->prepare("INSERT INTO USER VALUES(
-                                      :userID,
-                                      :password,
-                                      :name,
-                                      :sex,
-                                      :address,
-                                      :age,
-                                      :height,
-                                      :weight,
-                                      :comment
-                      )");
-$stmt->bindParam(':userID', $_POST['userID']); // DBのカラム名とここの定義は揃えなくてよい。
-$stmt->bindParam(':password', $_POST['password']);
-$stmt->bindParam(':name', $_POST['name']);
-$stmt->bindParam(':sex', $_POST['sex']);
-$stmt->bindParam(':address', $_POST['address']);
-$stmt->bindParam(':age', $_POST['age']);
-$stmt->bindParam(':height', $_POST['height']);
-$stmt->bindParam(':weight', $_POST['weight']);
-$stmt->bindParam(':comment', $_POST['comment']);
-$stmt->execute();
+// // cookie面倒なので一時削除
+// if(isset($_COOKIE["userID"])){
+//   $cookie_userID = $_COOKIE["userID"];
+// }else{
+//   $cookie_userID = "";
+// }
+
+$dbh = new PDO($dsn,$user,$password, [
+  // エラー発生時にエラーを投げる。（エラーコードのみ等ではなく）
+  PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+  // 結果セットに 返された際のカラム名で添字を付けた配列を返す。
+  PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+]);
 }
+catch (PDOExeption $e) {
+  exit ('データベースエラー');
+}
+
+//ログイン状態の場合ログイン後のページにリダイレクト
+if (isset($_SESSION["login"])) {
+  session_regenerate_id(TRUE);
+  header("Location: profile.php");
+  exit();
+}
+
+//postされて来きたとき
+if (count($_POST) !== 0) {
+  if(empty($_POST["userID"]) || empty($_POST["pass"])) {
+    $message = "ユーザー名とパスワードを入力してください";
+  }
+  else {
+    //post送信されてきたユーザー名がDBにあるか検索
+    try {
+      $stmt = $dbh -> prepare('SELECT * FROM user WHERE userID=:userID');
+      $stmt->bindParam(':userID', $_POST['userID']);
+      $stmt -> execute();
+      $result = $stmt -> fetch(PDO::FETCH_ASSOC);
+    }
+    catch (PDOExeption $e) {
+      exit('データベースエラー');
+    }
+    //検索したユーザー名に対してパスワードが正しいかを検証
+    //正しくないとき
+    if (!password_verify($_POST['pass'], $result['password'])) {
+      $message="ユーザー名かパスワードが違います";
+    }
+    //正しいとき
+    else {
+      // // cookieのセット 保存期間：１日
+      // setcookie('UserID', $_POST['userID'],time()+60*60*24);
+      // セッションidを再発行
+      // session_regenerate_id(TRUE);
+      $_SESSION["login"] = $_POST['userID']; //セッションにログイン情報を登録
+      header("Location: profile.php"); //ログイン後のページにリダイレクト
+      exit();
+    }
+  }
+}
+// メッセージ出力
+$message = htmlspecialchars($message);
+echo $message;
 ?>
 
 <!DOCTYPE html>
@@ -35,30 +81,15 @@ $stmt->execute();
     <meta charset="utf-8">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
     <title>ログイン機能</title>
   </head>
 
-    <form action="home.php" method="post">
-        <p>会員ID（メールアドレス）を入力：<input type="text" name="userID" required></p>
-        <p>パスワードを入力：<input type="password" name="password" required></p>
-        <p><input type="submit" value="ログイン"></p>
-    </form>
     <form action="index.php" method="post">
-        <h2>新規会員登録</h2>
-        <p>会員ID（メールアドレス）：<input type="text" name="userID"></p>
-        <p>パスワード：<input type="password" name="password"></p>
-        <p>登録名：<input type="text" name="name"></p>
-        性別：
-        <input type="radio" name="sex" value=0> 男
-        <input type="radio" name="sex" value=1> 女
-        <p>年齢：<input type="text" name="age"></p>
-        <p>お住まい：<input type="text" name="address"></p>
-        <p>身長：<input type="text" name="height"></p>
-        <p>体重：<input type="text" name="weight"></p>
-        <p>comment</p>
-      <textarea cols="50" rows="10" name="comment"></textarea><br>
-        <p><input type="submit" value="作成"></p>
-    </from>
+      <p>会員ID（メールアドレス）を入力：<input type="text" name="userID"  required value=<?php echo $cookie_userID;?>></p>
+      <p>パスワードを入力：<input type="password" name="pass" required></p>
+      <p><input type="submit" value="ログイン"></p>
+    </form>
+  <a href="profileRegistration.php">新規会員登録</a>
+
 </html>
     
