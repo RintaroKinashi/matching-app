@@ -28,9 +28,7 @@ const NUMBER_OF_QUESTIONS = 8;
   <meta charset="utf-8">
   <title>test</title>
   <link rel="stylesheet" href="stylesheet.css">
-</head>
 
-<body>
   <div class="header">
     <div class="header-list">
       <ul>
@@ -43,3 +41,5 @@ const NUMBER_OF_QUESTIONS = 8;
       </ul>
     </div>
   </div>
+
+</head>

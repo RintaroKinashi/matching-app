@@ -44,7 +44,9 @@ if (isset($_POST['q1'])) {
     $resultq = $stmtq->fetch(PDO::FETCH_ASSOC);
 
     echo "<div class='question'>";
+    echo "<div class='Partition_Block'>";
     echo "<p>Q" . $i . "：" . $resultq["sentence"] . "</p>";
+    echo "</div>";
     for ($j = 0; $j < 4; $j++) {
       $k = "";
       if (isset($result1['UserID']) && $result1['q' . $i] == $j) {
@@ -56,7 +58,9 @@ if (isset($_POST['q1'])) {
     echo "</br></div>";
   }
   ?>
-  <p><input type="submit" name="send" value="送信する"></p>
+  <center>
+    <p><input type="submit" name="send" value="送信する"></p>
+  </center>
 </form>
 </body>
 
