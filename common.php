@@ -37,7 +37,6 @@ const NUMBER_OF_QUESTIONS = 8;
         <li><a href="./question.php">分析</a></li>
         <li><a href="./matching.php">検索</a></li>
         <li><a href="./notice.php">友達申請</a></li>
-        <li><a href="./contactform.php">お問い合わせ</a></li>
         <li><a href="./logout.php">ログアウト</a></li>
       </ul>
     </div>

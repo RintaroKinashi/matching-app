@@ -9,7 +9,7 @@ body {
   ヘッダー CSSが反映されないときは「Shift+F5」でキャッシュを削除
   ============================================*/
   .header {
-    background-color: #FFD5EC;
+    background-color: #e5fff2;
     color: #fff;
     height: 90px;
   }
@@ -48,8 +48,8 @@ body {
     padding: 0.5em 1em;
     margin: 2em 0;
     color: #232323;
-    background: #FFEEFF;
-    border-left: solid 10px #FF97C2;
+    background: #f9fff4;
+    border-left: solid 10px #bcffdd;
   }
   /*============================================
   プロフィール
