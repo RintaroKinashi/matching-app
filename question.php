@@ -45,7 +45,7 @@ if (isset($_POST['q1'])) {
 
     echo "<div class='question'>";
     echo "<div class='Partition_Block'>";
-    echo "<p>Q" . $i . "：" . $resultq["sentence"] . "</p>";
+    echo "<p><b>Q" . $i . "：" . $resultq["sentence"] . "</b></p>";
     echo "</div>";
     echo "<div class='mx-3'>";
     for ($j = 0; $j < 4; $j++) {
@@ -53,7 +53,7 @@ if (isset($_POST['q1'])) {
       if (isset($result1['UserID']) && $result1['q' . $i] == $j) {
         $k = "checked";
       }
-      echo "<input type='radio' name='q" . $i . "' value='" . $j . "' " . $k . ">" . $resultq["Choice" . (string)($j + 1)]; // if(!empty($result1["UserID"])){if($result1['q'. $i]==$j){echo "checked";}}
+      echo "<input type='radio' name='q" . $i . "' value='" . $j . "' " . $k . ">" . $resultq["Choice" . (string)($j + 1)];
       echo "</br>";
     }
     echo "</br></div></div>";
