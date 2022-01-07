@@ -1,5 +1,5 @@
 body {
-    font-family: "ヒラギノ角ゴ ProN", sans-serif;
+    font-family:  "ヒラギノ角ゴ ProN W3", HiraKakuProN-W3, 游ゴシック, "Yu Gothic", メイリオ, Meiryo, Verdana, Helvetica, Arial, sans-serif;
   }
 
   li {
@@ -9,7 +9,7 @@ body {
   ヘッダー CSSが反映されないときは「Shift+F5」でキャッシュを削除
   ============================================*/
   .header {
-    background-color: #ffd700;
+    background-color: #FFD5EC;
     color: #fff;
     height: 90px;
   }
@@ -48,8 +48,8 @@ body {
     padding: 0.5em 1em;
     margin: 2em 0;
     color: #232323;
-    background: #fff8e8;
-    border-left: solid 10px #ffc06e;
+    background: #FFEEFF;
+    border-left: solid 10px #FF97C2;
   }
   /*============================================
   プロフィール
