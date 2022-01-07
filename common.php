@@ -27,7 +27,8 @@ const NUMBER_OF_QUESTIONS = 8;
 <head>
   <meta charset="utf-8">
   <title>test</title>
-  <link rel="stylesheet" href="stylesheet.css">
+  <link rel="stylesheet" href="public/css/stylesheet.css">
+  <link rel="stylesheet" type="text/css" href="public/css/bootstrap.min.css" />
 
   <div class="header">
     <div class="header-list">
