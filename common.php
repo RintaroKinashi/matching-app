@@ -18,7 +18,7 @@ $dbh = new PDO($dsn, $user, $password, [
 ]);
 
 // 問題数
-const NUMBER_OF_QUESTIONS = 8;
+const NUMBER_OF_QUESTIONS = 12;
 ?>
 
 <!DOCTYPE html>
