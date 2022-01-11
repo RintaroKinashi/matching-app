@@ -25,12 +25,12 @@ foreach ($result as $re) {
     $list_target[0] = $re['UserID'];
     $point = 0;
     // $point = 選んだラジオボタンが一緒だった問題の数
-    for ($j = 1; $j <= NUMBER_OF_QUESTIONS; $j++) {
+    for ($j = 1; $j <= $NUMBER_OF_QUESTIONS; $j++) {
         if ($re['q' . $j] == $resultMe['q' . $j]) {
             $point++;
         }
     }
-    $list_target[1] = round($point / NUMBER_OF_QUESTIONS * 100);
+    $list_target[1] = round($point / $NUMBER_OF_QUESTIONS * 100);
     $list_target[2] = 4 ** $point;
 
     $All_list_target[$i] = $list_target;

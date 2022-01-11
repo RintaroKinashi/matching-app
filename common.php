@@ -18,7 +18,9 @@ $dbh = new PDO($dsn, $user, $password, [
 ]);
 
 // 問題数
-const NUMBER_OF_QUESTIONS = 12;
+$stmt = $dbh->query("SELECT count(questionID) FROM m_question");
+$stmt->execute();
+$NUMBER_OF_QUESTIONS = $stmt->fetchColumn();
 ?>
 
 <!DOCTYPE html>

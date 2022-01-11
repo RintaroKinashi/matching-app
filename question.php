@@ -11,23 +11,23 @@ if (isset($_POST['q1'])) {
   if (empty($result1["UserID"])) {
     // 質問に未回答(IDが空)ならinsert
     $SQL = "INSERT INTO r_answer VALUES(:userID,";
-    for ($i = 1; $i < NUMBER_OF_QUESTIONS; $i++) {
+    for ($i = 1; $i < $NUMBER_OF_QUESTIONS; $i++) {
       $SQL .= ":q" . $i . ",";
     }
-    $SQL .= ":q" . NUMBER_OF_QUESTIONS . ");";
+    $SQL .= ":q" . $NUMBER_OF_QUESTIONS . ");";
     echo $SQL;
     $stmt = $dbh->prepare($SQL);
   } else {
     $SQL = "UPDATE r_answer SET ";
-    for ($i = 1; $i < NUMBER_OF_QUESTIONS; $i++) {
+    for ($i = 1; $i < $NUMBER_OF_QUESTIONS; $i++) {
       $SQL .= "q" . $i . " = :q" . $i . ", ";
     }
-    $SQL .= "q" . NUMBER_OF_QUESTIONS . " = :q" . NUMBER_OF_QUESTIONS . " WHERE UserID = :userID;";
+    $SQL .= "q" . $NUMBER_OF_QUESTIONS . " = :q" . $NUMBER_OF_QUESTIONS . " WHERE UserID = :userID;";
     echo $SQL;
     $stmt = $dbh->prepare($SQL);
   }
   $stmt->bindParam(':userID', $_SESSION["login"]);
-  for ($i = 1; $i < NUMBER_OF_QUESTIONS + 1; $i++) {
+  for ($i = 1; $i < $NUMBER_OF_QUESTIONS + 1; $i++) {
     $stmt->bindParam(':q' . $i, $_POST['q' . $i]);
   }
   $stmt->execute();
@@ -38,7 +38,7 @@ if (isset($_POST['q1'])) {
 
 <form action="question.php" method="post">
   <?php
-  for ($i = 1; $i < NUMBER_OF_QUESTIONS + 1; $i++) {
+  for ($i = 1; $i < $NUMBER_OF_QUESTIONS + 1; $i++) {
     $stmtq = $dbh->prepare("SELECT * FROM m_question WHERE questionID=$i");
     $stmtq->execute();
     $resultq = $stmtq->fetch(PDO::FETCH_ASSOC);
